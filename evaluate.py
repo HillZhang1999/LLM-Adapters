@@ -229,17 +229,17 @@ def load_model(args) -> tuple:
             device_map={"": device},
         )
 
-        # unwind broken decapoda-research config
-        model.config.pad_token_id = tokenizer.pad_token_id = 0  # unk
-        model.config.bos_token_id = 1
-        model.config.eos_token_id = 2
+    # unwind broken decapoda-research config
+    model.config.pad_token_id = tokenizer.pad_token_id = 0  # unk
+    model.config.bos_token_id = 1
+    model.config.eos_token_id = 2
 
-        if not load_8bit:
-            model.half()  # seems to fix bugs for some users.
+    if not load_8bit:
+        model.half()  # seems to fix bugs for some users.
 
-        model.eval()
-        if torch.__version__ >= "2" and sys.platform != "win32":
-            model = torch.compile(model)
+    model.eval()
+    if torch.__version__ >= "2" and sys.platform != "win32":
+        model = torch.compile(model)
 
     return tokenizer, model
 
